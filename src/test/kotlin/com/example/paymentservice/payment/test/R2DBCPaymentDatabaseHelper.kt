@@ -1,13 +1,13 @@
 package com.example.paymentservice.payment.test
 
-import com.example.paymentservice.payment.application.domain.PaymentEvent
-import com.example.paymentservice.payment.application.domain.PaymentOrder
-import com.example.paymentservice.payment.application.domain.PaymentStatus
+import com.example.paymentservice.payment.application.domain.*
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.transaction.reactive.TransactionalOperator
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 class R2DBCPaymentDatabaseHelper(
         private val databaseClient: DatabaseClient,
@@ -27,6 +27,10 @@ class R2DBCPaymentDatabaseHelper(
                                 orderId = results.first()["order_id"] as String,
                                 orderName = results.first()["order_name"] as String,
                                 buyerId = results.first()["buyer_id"] as Long,
+                                paymentKey = results.first()["payment_key"] as String?,
+                                paymentType = if (results.first()["type"] != null) PaymentType.get(results.first()["type"] as String) else null,
+                                paymentMethod = if (results.first()["method"] != null) PaymentMethod.valueOf(results.first()["method"] as String) else null,
+                                approvedAt = if (results.first()["approved_at"] != null) (results.first()["approved_at"] as ZonedDateTime).toLocalDateTime() else null,
                                 isPaymentDone = ((results.first()["is_payment_done"] as Byte).toInt() == 1),
                                 paymentOrders = results.map { result ->
                                     PaymentOrder(
@@ -37,8 +41,8 @@ class R2DBCPaymentDatabaseHelper(
                                             productId = result["product_id"] as Long,
                                             amount = (result["amount"] as BigDecimal),
                                             paymentStatus = PaymentStatus.get(result["payment_order_status"] as String),
-                                            isLedgerUpdated = if (((result["ledger_updated"]) as Byte).toInt() == 1) true else false,
-                                            isWalletUpdated = if (((result["wallet_updated"]) as Byte).toInt() == 1) true else false
+                                            isLedgerUpdated = ((result["ledger_updated"]) as Byte).toInt() == 1,
+                                            isWalletUpdated = ((result["wallet_updated"]) as Byte).toInt() == 1
                                     )
                                 }
                         )
@@ -49,7 +53,8 @@ class R2DBCPaymentDatabaseHelper(
     }
 
     override fun clean(): Mono<Void> {
-        return deletePaymentOrders()
+        return deletePaymentOrderHistories()
+                .flatMap { deletePaymentOrders() }
                 .flatMap { deletePaymentEvents() }
                 .`as`(transactionalOperator::transactional)
                 .then()
@@ -67,6 +72,12 @@ class R2DBCPaymentDatabaseHelper(
                 .rowsUpdated()
     }
 
+    private fun deletePaymentOrderHistories(): Mono<Long> {
+        return databaseClient.sql(DELETE_PAYMENT_ORDER_HISTORY_QUERY)
+                .fetch()
+                .rowsUpdated()
+    }
+
     companion object {
         val SELECT_PAYMENT_QUERY = """
           SELECT * FROM payment_events pe 
@@ -80,6 +91,10 @@ class R2DBCPaymentDatabaseHelper(
 
         val DELETE_PAYMENT_ORDER_QUERY = """
             DELETE FROM payment_orders
+        """.trimIndent()
+
+        val DELETE_PAYMENT_ORDER_HISTORY_QUERY = """
+            DELETE FROM payment_order_histories
         """.trimIndent()
     }
 

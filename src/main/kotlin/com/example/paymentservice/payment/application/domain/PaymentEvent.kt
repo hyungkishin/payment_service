@@ -8,8 +8,8 @@ data class PaymentEvent (
         val orderName: String,
         val orderId: String,
         val paymentKey: String? = null,
-        val amountType: PaymentType?= null,
-        val paymentMethod: PaymentMethod? =null,
+        val paymentType: PaymentType? = null,
+        val paymentMethod: PaymentMethod? = null,
         val approvedAt: LocalDateTime? = null,
         val paymentOrders: List<PaymentOrder> = emptyList(),
         private var isPaymentDone: Boolean = false
@@ -18,5 +18,17 @@ data class PaymentEvent (
         return paymentOrders.sumOf { it.amount }.toLong()
     }
 
-    fun isPaymentDone() = isPaymentDone
+    fun isPaymentDone(): Boolean = isPaymentDone
+
+    fun isSuccess(): Boolean {
+        return paymentOrders.all { it.paymentStatus == PaymentStatus.SUCCESS }
+    }
+
+    fun isFailure(): Boolean {
+        return paymentOrders.all { it.paymentStatus == PaymentStatus.FAILURE }
+    }
+
+    fun isUnknown(): Boolean {
+        return paymentOrders.all { it.paymentStatus == PaymentStatus.UNKNOWN }
+    }
 }

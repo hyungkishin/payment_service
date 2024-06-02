@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono
 
 @Controller
 @WebAdapter
-@RequestMapping("/v1/toss")
 class PaymentController {
 
     @GetMapping("/success")
