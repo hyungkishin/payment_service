@@ -18,7 +18,7 @@ CREATE TABLE payment_events (
 );
 
 # 페이먼트 주문 테이블
-CREATE TABLE payment_order (
+CREATE TABLE payment_orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     payment_event_id BIGINT NOT NULL comment '결제 이벤트 참조 id',
     seller_id BIGINT NOT NULL comment '판매자 id',
@@ -46,6 +46,6 @@ CREATE TABLE payment_order_histories (
     changed_by VARCHAR(255) comment '상태 변화를 발생시킨 주체',
     reason VARCHAR(255) comment '상태 변화의 원인주체',
 
-    FOREIGN KEY (payment_order_id) REFERENCES payment_order(id)
+    FOREIGN KEY (payment_order_id) REFERENCES payment_orders(id)
 );
 ```
