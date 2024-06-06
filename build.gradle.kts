@@ -41,6 +41,8 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.named<Test>("test") {
+    useJUnitPlatform {
+//        excludeTags("TooLongTime")
+    }
 }
