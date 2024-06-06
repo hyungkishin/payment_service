@@ -4,7 +4,7 @@ import com.example.paymentservice.payment.adapter.out.web.toss.executer.PaymentE
 import com.example.paymentservice.payment.application.domain.PaymentExecutionResult
 import com.example.paymentservice.payment.application.port.`in`.PaymentConfirmCommand
 import com.example.paymentservice.payment.application.port.out.PaymentExecutorPort
-import com.example.paymentservice.payment.common.WebAdapter
+import com.example.paymentservice.common.WebAdapter
 import reactor.core.publisher.Mono
 
 @WebAdapter

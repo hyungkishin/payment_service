@@ -3,7 +3,7 @@ package com.example.paymentservice.payment.adapter.out.web.product
 import com.example.paymentservice.payment.adapter.out.web.product.client.ProductClient
 import com.example.paymentservice.payment.application.domain.Product
 import com.example.paymentservice.payment.application.port.out.LoadProductPort
-import com.example.paymentservice.payment.common.WebAdapter
+import com.example.paymentservice.common.WebAdapter
 import reactor.core.publisher.Flux
 
 @WebAdapter

@@ -3,8 +3,8 @@ package com.example.paymentservice.payment.adapter.`in`.web.view
 import com.example.paymentservice.payment.adapter.`in`.web.request.CheckoutRequest
 import com.example.paymentservice.payment.application.port.`in`.CheckoutCommand
 import com.example.paymentservice.payment.application.port.`in`.CheckoutUseCase
-import com.example.paymentservice.payment.common.IdempotencyCreator
-import com.example.paymentservice.payment.common.WebAdapter
+import com.example.paymentservice.common.IdempotencyCreator
+import com.example.paymentservice.common.WebAdapter
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

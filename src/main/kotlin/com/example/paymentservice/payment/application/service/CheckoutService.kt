@@ -5,7 +5,7 @@ import com.example.paymentservice.payment.application.port.`in`.CheckoutCommand
 import com.example.paymentservice.payment.application.port.`in`.CheckoutUseCase
 import com.example.paymentservice.payment.application.port.out.LoadProductPort
 import com.example.paymentservice.payment.application.port.out.SavePaymentPort
-import com.example.paymentservice.payment.common.UseCase
+import com.example.paymentservice.common.UseCase
 import reactor.core.publisher.Mono
 
 @UseCase

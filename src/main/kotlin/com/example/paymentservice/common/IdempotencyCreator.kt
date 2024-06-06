@@ -1,4 +1,4 @@
-package com.example.paymentservice.payment.common
+package com.example.paymentservice.common
 
 import java.util.*
 

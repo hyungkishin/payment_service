@@ -9,7 +9,7 @@ import com.example.paymentservice.payment.application.port.out.PaymentExecutorPo
 import com.example.paymentservice.payment.application.port.out.PaymentStatusUpdateCommand
 import com.example.paymentservice.payment.application.port.out.PaymentStatusUpdatePort
 import com.example.paymentservice.payment.application.port.out.PaymentValidationPort
-import com.example.paymentservice.payment.common.UseCase
+import com.example.paymentservice.common.UseCase
 import reactor.core.publisher.Mono
 
 @UseCase

@@ -29,10 +29,18 @@ spring:
           required-acks: all
           auto-create-topics: false
 
+        bindings:
+          send-out-0:
+            producer:
+              record-metadata-channel: payment-result
+
       bindings:
-        consume-in-0:
+        send-out-0:
           destination: payment
           group: payment-service
+
+#    function:
+#      definition: send;wallet;ledger
 
 logging:
   level:

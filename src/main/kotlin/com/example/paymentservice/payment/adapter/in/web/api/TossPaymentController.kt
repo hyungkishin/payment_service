@@ -6,7 +6,7 @@ import com.example.paymentservice.payment.adapter.out.web.toss.executer.TossPaym
 import com.example.paymentservice.payment.application.domain.PaymentConfirmationResult
 import com.example.paymentservice.payment.application.port.`in`.PaymentConfirmCommand
 import com.example.paymentservice.payment.application.port.`in`.PaymentConfirmUseCase
-import com.example.paymentservice.payment.common.WebAdapter
+import com.example.paymentservice.common.WebAdapter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

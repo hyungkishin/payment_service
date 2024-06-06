@@ -37,6 +37,7 @@ CREATE TABLE payment_orders (
     FOREIGN KEY (payment_event_id) REFERENCES payment_events(id)
 );
 
+# 주문 테이블
 CREATE TABLE payment_order_histories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     payment_order_id BIGINT NOT NULL comment '결제 주문 테이블 참조 id',
@@ -47,5 +48,18 @@ CREATE TABLE payment_order_histories (
     reason VARCHAR(255) comment '상태 변화의 원인주체',
 
     FOREIGN KEY (payment_order_id) REFERENCES payment_orders(id)
+);
+
+# outboxes 테이블
+CREATE TABLE outboxes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    idempotency_key VARCHAR(255) UNIQUE NOT NULL comment '멱등성 키',
+    status ENUM('INIT', 'FAILURE', 'SUCCESS') DEFAULT 'INIT' comment '메세지 전송 상태',
+    type VARCHAR(40) comment '이벤트 메세지 타입',
+    partition_key INT DEFAULT 0 comment '메세지 큐의 파티셔닝 키',
+    payload JSON comment '이벤트 메세지 본문',
+    metadata JSON comment '메타 데이터',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```

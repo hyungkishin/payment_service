@@ -3,7 +3,7 @@ package com.example.paymentservice.payment.application.service
 import com.example.paymentservice.payment.application.port.`in`.PaymentConfirmCommand
 import com.example.paymentservice.payment.application.port.`in`.PaymentRecoveryUseCase
 import com.example.paymentservice.payment.application.port.out.*
-import com.example.paymentservice.payment.common.UseCase
+import com.example.paymentservice.common.UseCase
 import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import reactor.core.scheduler.Schedulers

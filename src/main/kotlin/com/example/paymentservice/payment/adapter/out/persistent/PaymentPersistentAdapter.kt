@@ -6,7 +6,7 @@ import com.example.paymentservice.payment.adapter.out.persistent.repository.Paym
 import com.example.paymentservice.payment.application.domain.PaymentEvent
 import com.example.paymentservice.payment.application.domain.PendingPaymentEvent
 import com.example.paymentservice.payment.application.port.out.*
-import com.example.paymentservice.payment.common.PersistentAdapter
+import com.example.paymentservice.common.PersistentAdapter
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
