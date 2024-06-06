@@ -53,19 +53,19 @@ class R2DBCPaymentOutboxRepository (
             .thenReturn(true)
     }
 
-//    override fun getPendingPaymentOutboxes(): Flux<PaymentEventMessage> {
-//        return databaseClient.sql(SELECT_PENDING_PAYMENT_OUTBOX_QUERY)
-//            .bind("createdAt", LocalDateTime.now().format(MySQLDateTimeFormatter))
-//            .fetch()
-//            .all()
-//            .map {
-//                PaymentEventMessage(
-//                    type = PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS,
-//                    payload = objectMapper.readValue<Map<String, Any>>(it["payload"] as String),
-//                    metadata = objectMapper.readValue<Map<String, Any>>(it["metadata"] as String)
-//                )
-//            }
-//    }
+    override fun getPendingPaymentOutboxes(): Flux<PaymentEventMessage> {
+        return databaseClient.sql(SELECT_PENDING_PAYMENT_OUTBOX_QUERY)
+            .bind("createdAt", LocalDateTime.now().format(MySQLDateTimeFormatter))
+            .fetch()
+            .all()
+            .map {
+                PaymentEventMessage(
+                    type = PaymentEventMessageType.PAYMENT_CONFIRMATION_SUCCESS,
+                    payload = objectMapper.readValue<Map<String, Any>>(it["payload"] as String),
+                    metadata = objectMapper.readValue<Map<String, Any>>(it["metadata"] as String)
+                )
+            }
+    }
 
     private fun createPaymentEventMessage(command: PaymentStatusUpdateCommand): PaymentEventMessage {
         return PaymentEventMessage(
@@ -81,30 +81,30 @@ class R2DBCPaymentOutboxRepository (
 
     companion object {
         val INSERT_OUTBOX_QUERY = """
-      INSERT INTO outboxes (idempotency_key, type, partition_key, payload, metadata)
-      VALUES (:idempotencyKey, :type, :partitionKey, :payload, :metadata) 
+          INSERT INTO outboxes (idempotency_key, type, partition_key, payload, metadata)
+          VALUES (:idempotencyKey, :type, :partitionKey, :payload, :metadata) 
     """.trimIndent()
 
         val UPDATE_OUTBOX_MESSAGE_AS_SENT_QUERY = """
-      UPDATE outboxes
-      SET status = 'SUCCESS'
-      WHERE idempotency_key = :idempotencyKey
-      AND type = :type
+          UPDATE outboxes
+          SET status = 'SUCCESS'
+          WHERE idempotency_key = :idempotencyKey
+          AND type = :type
     """.trimIndent()
 
         val UPDATE_OUTBOX_MESSAGE_AS_FAILURE_QUERY = """
-      UPDATE outboxes
-      SET status = 'FAILURE'
-      WHERE idempotency_key = :idempotencyKey
-      AND type = :type
+          UPDATE outboxes
+          SET status = 'FAILURE'
+          WHERE idempotency_key = :idempotencyKey
+          AND type = :type
     """.trimIndent()
 
         val SELECT_PENDING_PAYMENT_OUTBOX_QUERY = """
-      SELECT * 
-      FROM outboxes
-      WHERE (status = 'INIT' OR status = 'FAILURE')
-      AND created_at <= :createdAt - INTERVAL 1 MINUTE
-      AND type = 'PAYMENT_CONFIRMATION_SUCCESS'
+          SELECT * 
+          FROM outboxes
+          WHERE (status = 'INIT' OR status = 'FAILURE')
+          AND created_at <= :createdAt - INTERVAL 1 MINUTE
+          AND type = 'PAYMENT_CONFIRMATION_SUCCESS'
     """.trimIndent()
     }
 }
